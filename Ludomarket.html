@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090910">
+<title>Ludo Market | Premium Gaming Store</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090910;color:#f5f2ff;font-family:Arial,sans-serif}
+:root{--gold:#e7bd55;--purple:#8060d9;--muted:#aaa6b8}
+header{padding:19px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #292434;background:#101019}
+.logo{font-size:23px;font-weight:900;color:var(--gold)}
+.logo span{color:white}
+button{border:0;border-radius:9px;padding:13px 18px;background:var(--gold);color:#17120a;font-weight:bold;cursor:pointer}
+button.secondary{background:#29233b;color:white}
+input{width:100%;padding:14px;margin:8px 0 15px;border:1px solid #393348;border-radius:9px;background:#171522;color:white}
+label{font-size:13px;color:#c8c2d7}
+main{max-width:1100px;margin:35px auto;padding:0 18px}
+.hero{padding:35px 25px;border:1px solid #393044;border-radius:18px;background:linear-gradient(125deg,#211735,#11111b 65%,#302313)}
+.hero h1{font-size:36px;margin:10px 0;color:var(--gold)}
+.hero p{color:#c4bfd0;line-height:1.7}
+.tag{color:var(--gold);font-size:12px;letter-spacing:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:22px}
+.card{background:#15141f;border:1px solid #302b3c;border-radius:14px;padding:20px}
+.card h3{margin-top:0}
+.price{font-size:24px;color:var(--gold);font-weight:bold}
+.muted{color:var(--muted);font-size:13px;line-height:1.6}
+.auth{max-width:430px;margin:35px auto}
+.auth h2{color:var(--gold)}
+.hidden{display:none!important}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+nav button{background:#211d2e;color:white}
+nav button.active{background:var(--gold);color:#17120a}
+.notice{padding:13px;background:#211d2e;border-radius:10px;color:#d6cdec;font-size:13px;line-height:1.6;margin-top:15px}
+#message{font-size:13px;color:var(--gold);margin:12px 0}
+footer{text-align:center;padding:30px;color:#888;font-size:12px}
+@media(max-width:600px){.hero h1{font-size:28px}header{padding:16px}.logo{font-size:19px}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">LUDO <span>MARKET</span></div>
+ <div id="headerStatus" class="muted">Premium Gaming Marketplace</div>
+</header>
+
+<main>
+<section class="hero">
+ <div class="tag">YOUR GAMING MARKETPLACE</div>
+ <h1>Welcome to Ludo Market</h1>
+ <p>Explore gaming packages, submit order requests and manage your account through one simple platform.</p>
+ <button onclick="showAuth()">Get Started</button>
+</section>
+
+<section id="authSection" class="auth card hidden">
+ <h2 id="authTitle">Customer Login</h2>
+ <label>Email Address</label>
+ <input id="email" type="email" placeholder="Enter your email">
+ <label>Password</label>
+ <input id="password" type="password" placeholder="Enter your password">
+ <button id="authButton" onclick="login()">Login</button>
+ <button class="secondary" onclick="toggleAuth()">Create Account</button>
+ <div id="message"></div>
+</section>
+
+<section id="storeSection">
+ <div style="margin-top:35px">
+  <div class="tag">OUR STORE</div>
+  <h2>Diamonds & Coins Packages</h2>
+  <p class="muted">Packages shown below are initial sample prices. Final prices will be managed from the Owner dashboard.</p>
+ </div>
+ <div class="grid">
+  <div class="card">
+   <div class="tag">DIAMONDS</div>
+   <h3>100 Diamonds</h3>
+   <div class="price">PKR 250</div>
+   <p class="muted">Gaming package</p>
+   <button onclick="showAuth()">Order Request</button>
+  </div>
+  <div class="card">
+   <div class="tag">POPULAR PACKAGE</div>
+   <h3>830 Diamonds</h3>
+   <div class="price">PKR 700</div>
+   <p class="muted">Gaming package</p>
+   <button onclick="showAuth()">Order Request</button>
+  </div>
+  <div class="card">
+   <div class="tag">DIAMONDS</div>
+   <h3>1800 Diamonds</h3>
+   <div class="price">PKR 1450</div>
+   <p class="muted">Gaming package</p>
+   <button onclick="showAuth()">Order Request</button>
+  </div>
+  <div class="card">
+   <div class="tag">COINS</div>
+   <h3>100K Coins</h3>
+   <div class="price">PKR 200</div>
+   <p class="muted">Gaming package</p>
+   <button onclick="showAuth()">Order Request</button>
+  </div>
+  <div class="card">
+   <div class="tag">COINS</div>
+   <h3>500K Coins</h3>
+   <div class="price">PKR 650</div>
+   <p class="muted">Gaming package</p>
+   <button onclick="showAuth()">Order Request</button>
+  </div>
+  <div class="card">
+   <div class="tag">COINS</div>
+   <h3>1M Coins</h3>
+   <div class="price">PKR 1100</div>
+   <p class="muted">Gaming package</p>
+   <button onclick="showAuth()">Order Request</button>
+  </div>
+ </div>
+</section>
+
+<section id="dashboard" class="hidden">
+ <div class="card" style="margin-top:25px">
+  <div class="tag">SECURE WORKSPACE</div>
+  <h2 id="welcome">Welcome</h2>
+  <p id="roleText" class="muted">Your account dashboard</p>
+  <nav>
+   <button class="active" onclick="showPanel('overview',this)">Overview</button>
+   <button onclick="showPanel('orders',this)">Orders</button>
+   <button onclick="showPanel('team',this)">Team</button>
+   <button onclick="showPanel('finance',this)">Finance</button>
+  </nav>
+  <div id="overview" class="panel">
+   <div class="grid">
+    <div class="card"><p class="muted">Account Role</p><h3 id="roleValue">Loading</h3></div>
+    <div class="card"><p class="muted">Account Status</p><h3>Active</h3></div>
+   </div>
+   <div class="notice">Your account is connected to the Ludo Market database.</div>
+  </div>
+  <div id="orders" class="panel hidden">
+   <h3>Order Management</h3>
+   <p class="muted">Order tools will be connected in the next development step.</p>
+  </div>
+  <div id="team" class="panel hidden">
+   <h3>Team Management</h3>
+   <p class="muted">Owner and Deputy Owner team controls will be added next.</p>
+  </div>
+  <div id="finance" class="panel hidden">
+   <h3>Finance & Profit</h3>
+   <p class="muted">Verified payments and profit records will be connected after secure order setup.</p>
+  </div>
+  <button class="secondary" onclick="logout()">Logout</button>
+ </div>
+</section>
+
+<div class="notice">
+ Ludo Market is an independent marketplace concept, not an official Yalla Ludo website. Diamond and Coin fulfillment must follow the game's official rules and any required written permission. Account trading is disabled. Never share game passwords or OTPs.
+</div>
+</main>
+
+<footer>© 2026 Ludo Market. All rights reserved.</footer>
+
+<script>
+const SUPABASE_URL = "https://ujxezequhgbhd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Xt4W0lEKSFf9IJayKsQmrg_OoI2R3YA";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let isSignup = false;
+
+function showAuth(){
+ document.getElementById("authSection").classList.remove("hidden");
+ document.getElementById("authSection").scrollIntoView({behavior:"smooth"});
+}
+function toggleAuth(){
+ isSignup = !isSignup;
+ document.getElementById("authTitle").textContent = isSignup ? "Create Account" : "Customer Login";
+ document.getElementById("authButton").textContent = isSignup ? "Sign Up" : "Login";
+ document.getElementById("message").textContent = "";
+}
+async function login(){
+ const email = document.getElementById("email").value.trim();
+ const password = document.getElementById("password").value;
+ const msg = document.getElementById("message");
+ if(!email || !password){msg.textContent="Enter email and password.";return}
+ msg.textContent="Please wait...";
+ let result;
+ if(isSignup){
+  result = await db.auth.signUp({email,password});
+ }else{
+  result = await db.auth.signInWithPassword({email,password});
+ }
+ if(result.error){msg.textContent=result.error.message;return}
+ if(isSignup && !result.data.session){
+  msg.textContent="Account created. Check your email to confirm, then log in.";
+  return;
+ }
+ msg.textContent="Success!";
+ await loadDashboard();
+}
+async function loadDashboard(){
+ const {data:{user}} = await db.auth.getUser();
+ if(!user)return;
+ const {data:profile,error} = await db.from("profiles")
+  .select("role,is_active,full_name")
+  .eq("id",user.id).single();
+ if(error){document.getElementById("message").textContent=error.message;return}
+ if(!profile.is_active){document.getElementById("message").textContent="Account is inactive. Contact the Owner.";return}
+ document.getElementById("authSection").classList.add("hidden");
+ document.getElementById("storeSection").classList.add("hidden");
+ document.getElementById("dashboard").classList.remove("hidden");
+ document.getElementById("welcome").textContent="Welcome, "+(profile.full_name || user.email);
+ document.getElementById("roleText").textContent="Your access level: "+profile.role;
+ document.getElementById("roleValue").textContent=profile.role;
+ document.getElementById("headerStatus").textContent=profile.role;
+}
+async function logout(){
+ await db.auth.signOut();
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("storeSection").classList.remove("hidden");
+ document.getElementById("authSection").classList.add("hidden");
+ document.getElementById("headerStatus").textContent="Premium Gaming Marketplace";
+}
+function showPanel(id,btn){
+ document.querySelectorAll(".panel").forEach(p=>p.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+}
+db.auth.onAuthStateChange((event,session)=>{
+ if(session && event==="SIGNED_IN") loadDashboard();
+});
+db.auth.getSession().then(({data})=>{
+ if(data.session)loadDashboard();
+});
+</script>
+</body>
+</html>
